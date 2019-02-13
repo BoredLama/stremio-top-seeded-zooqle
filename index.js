@@ -65,10 +65,10 @@ function getImdbs(items) {
               items[item.type][ij].imdb_id = res
               items[item.type][ij].id = res
               items[item.type][ij].poster = 'https://images.metahub.space/poster/small/'+res+'/img'
-              setTimeout(() => { cb() }, 10)
               return true
             }
           })
+          setTimeout(() => { cb() }, 10)
         } else {
           items[item.type].some((el, ij) => {
             if (el.name == item.name && el.year == el.year) {
@@ -78,8 +78,8 @@ function getImdbs(items) {
               return true
             }
           })
+          cb()
         }
-        cb()
       })
     }
 
