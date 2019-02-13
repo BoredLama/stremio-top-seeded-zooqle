@@ -213,4 +213,4 @@ addon.defineCatalogHandler((args, cb) => {
     cb(null, ['topmovieszooqle', 'topserieszooqle'].indexOf(args.id) > -1 ? { metas: (args.extra ? (args.extra.genre == 'New' ? news : args.extra.genre == 'New Season' ? newSe : tops) : tops)[args.type] } : null)
 })
 
-addon.runHTTPWithOptions({ port: 80 })
+addon.runHTTPWithOptions({ port: process.env.PORT || 3000 })
