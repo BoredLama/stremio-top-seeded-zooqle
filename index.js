@@ -78,8 +78,8 @@ function getImdbs(items) {
               return true
             }
           })
-          cb()
         }
+        cb()
       })
     }
 
