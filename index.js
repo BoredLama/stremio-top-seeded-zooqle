@@ -141,6 +141,10 @@ console.log('needle start')
   needle.get(domain, { headers }, (err, resp, body) => {
 console.log('needle end')
     if (!err && body) {
+      
+      if (Buffer.isBuffer(body))
+        body = body.toString()
+
 console.log('needle end 1')
       const $ = cheerio.load(body)
       const panel = $('div.panel-heading.small')
