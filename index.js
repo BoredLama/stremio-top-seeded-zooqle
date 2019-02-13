@@ -230,3 +230,6 @@ addon.defineCatalogHandler((args, cb) => {
 })
 
 addon.runHTTPWithOptions({ port: process.env.PORT || 3000 })
+
+addon.publishToCentral("https://top-zooqle.herokuapp.com/manifest.json")
+
