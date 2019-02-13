@@ -136,8 +136,11 @@ console.log('needle end')
 console.log('needle end 1')
       const $ = cheerio.load(body)
       const panel = $('div.panel-heading.small')
+console.log('needle end 2')
       if (panel && panel.length) {
+console.log('needle end 3')
         panel.each((ij, el) => {
+console.log('needle end 4')
           const elem = $(el)
           let type
 
