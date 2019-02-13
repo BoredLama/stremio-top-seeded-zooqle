@@ -3,7 +3,7 @@ const cheerio = require('cheerio')
 const async = require('async')
 const nameToImdb = require('name-to-imdb')
 
-const domain = 'https://zooqle.com'
+const domain = 'https://zooqle.nocensor.icu'
 
 let tops = {
   series: [],
