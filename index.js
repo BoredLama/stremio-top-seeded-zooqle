@@ -3,7 +3,15 @@ const cheerio = require('cheerio')
 const async = require('async')
 const nameToImdb = require('name-to-imdb')
 
-const domain = 'https://zooqle.unblocked.cx'
+const domain = 'https://cors-anywhere.herokuapp.com/https://zooqle.com/'
+
+const imgDomain = 'https://zooqle.com'
+
+const headers = {
+  'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/71.0.3578.98 Safari/537.36',
+  'Origin': imgDomain,
+  'Referer': imgDomain + '/'
+}
 
 let tops = {
   series: [],
@@ -130,7 +138,7 @@ const populate = () => {
     'series': []
   }
 console.log('needle start')
-  needle.get(domain, (err, resp, body) => {
+  needle.get(domain, { headers }, (err, resp, body) => {
 console.log('needle end')
     if (!err && body) {
 console.log('needle end 1')
@@ -162,7 +170,7 @@ console.log('needle end 4')
                 let releaseInfo
                 const imgTmp = cell.find('img')
                 if (imgTmp && imgTmp.length)
-                  poster = domain + imgTmp.attr('src')
+                  poster = imgDomain + imgTmp.attr('src')
                 if (poster && poster.includes('-2.')) 
                   poster = poster.replace('-2.', '-3.')
                 if (type == 'movie') {
