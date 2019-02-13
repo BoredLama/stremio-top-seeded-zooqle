@@ -22,7 +22,7 @@ let newSe = {
 let updateMetasTimer
 
 function getImdbs(items) {
-
+console.log('get imdb')
   if (updateMetasTimer) {
     clearTimeout(updateMetasTimer)
     updateMetasTimer = false
@@ -30,8 +30,10 @@ function getImdbs(items) {
 
   const metas = []
 
-  const metaQueue = async.queue((item, cb) => {
+  let countMetas = 0
 
+  const metaQueue = async.queue((item, cb) => {
+console.log('queue size: ' + metaQueue.length())
     if (item.imdb_id) {
       cb()
       return
@@ -127,9 +129,11 @@ const populate = () => {
     'movie': [],
     'series': []
   }
-
+console.log('needle start')
   needle.get(domain, (err, resp, body) => {
+console.log('needle end')
     if (!err && body) {
+console.log('needle end 1')
       const $ = cheerio.load(body)
       const panel = $('div.panel-heading.small')
       if (panel && panel.length) {
