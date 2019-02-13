@@ -24,7 +24,9 @@ let newSe = {
 let updateMetasTimer
 
 function getImdbs(items) {
-console.log('get imdb')
+
+  console.log('metas - start')
+
   if (updateMetasTimer) {
     clearTimeout(updateMetasTimer)
     updateMetasTimer = false
@@ -35,7 +37,6 @@ console.log('get imdb')
   let countMetas = 0
 
   const metaQueue = async.queue((item, cb) => {
-console.log('queue size: ' + metaQueue.length())
     if (item.imdb_id) {
       cb()
       return
@@ -116,7 +117,7 @@ console.log('queue size: ' + metaQueue.length())
       }, 3600000) // try again in 1 hour
     }
 
-    console.log('drained')
+    console.log('metas - end')
   }
 
   for (var key in items)
@@ -131,23 +132,24 @@ const populate = () => {
     'movie': [],
     'series': []
   }
-console.log('needle start')
+
+  console.log('needle - start')
+
   needle.get(domain, (err, resp, body) => {
-console.log('needle end')
+
+    console.log('needle - end')
+
     if (!err && body) {
       
       if (Buffer.isBuffer(body))
         body = body.toString()
 
-console.log('needle end 1')
+      console.log('needle - success')
+
       const $ = cheerio.load(body)
       const panel = $('div.panel-heading.small')
-console.log('needle end 2')
-console.log(body)
       if (panel && panel.length) {
-console.log('needle end 3')
         panel.each((ij, el) => {
-console.log('needle end 4')
           const elem = $(el)
           let type
 
