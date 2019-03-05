@@ -10,7 +10,7 @@
     "cheerio": "^1.0.0-rc.2",
     "needle": "^2.2.4",
     "name-to-imdb": "^2.3.0",
-    "stremio-addon-sdk": "Stremio/stremio-addon-sdk#2f0ecb2ad03b777b1d305810d007f0f0e3fb7bb7"
+    "stremio-addon-sdk": "^1.0.3"
   },
   "engines": {
     "node": "8.12.0"
