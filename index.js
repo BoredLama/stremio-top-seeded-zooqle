@@ -25,8 +25,6 @@ let updateMetasTimer
 
 function getImdbs(items) {
 
-  console.log('metas - start')
-
   if (updateMetasTimer) {
     clearTimeout(updateMetasTimer)
     updateMetasTimer = false
@@ -117,7 +115,6 @@ function getImdbs(items) {
       }, 3600000) // try again in 1 hour
     }
 
-    console.log('metas - end')
   }
 
   for (var key in items)
@@ -133,18 +130,12 @@ const populate = () => {
     'series': []
   }
 
-  console.log('needle - start')
-
   needle.get(domain, (err, resp, body) => {
-
-    console.log('needle - end')
 
     if (!err && body) {
       
       if (Buffer.isBuffer(body))
         body = body.toString()
-
-      console.log('needle - success')
 
       const $ = cheerio.load(body)
       const panel = $('div.panel-heading.small')
@@ -196,9 +187,9 @@ populate()
 
 setInterval(populate, 172800000) // populate every 2 days
 
-const addonSDK = require('stremio-addon-sdk')
+const { addonBuilder, serveHTTP, publishToCentral }  = require('stremio-addon-sdk')
 
-const addon = new addonSDK({
+const addon = new addonBuilder({
     id: 'org.topseededzooqle',
     version: '0.0.1',
     logo: 'https://www.saashub.com/images/app/service_logos/18/28ea71c28970/large.png',
@@ -213,23 +204,35 @@ const addon = new addonSDK({
         id: 'topmovieszooqle',
         name: 'Top Seeded Movies by Zooqle',
         genres: ['New'],
-        extraSupported: [ 'genre' ]
+        extra: [
+          {
+            name: 'genre',
+            isRequired: false
+          }
+        ]
       },
       {
         type: 'series',
         id: 'topserieszooqle',
         name: 'Top Seeded Series by Zooqle',
         genres: ['New', 'New Season'],
-        extraSupported: [ 'genre' ]
+        extra: [
+          {
+            name: 'genre',
+            isRequired: false
+          }
+        ]
       }
     ]
 })
 
-addon.defineCatalogHandler((args, cb) => {
-    cb(null, ['topmovieszooqle', 'topserieszooqle'].indexOf(args.id) > -1 ? { metas: (args.extra ? (args.extra.genre == 'New' ? news : args.extra.genre == 'New Season' ? newSe : tops) : tops)[args.type] } : null)
+addon.defineCatalogHandler(args => {
+  return new Promise((resolve, reject) => {
+    resolve({ metas: (['topmovieszooqle', 'topserieszooqle'].indexOf(args.id) > -1 ? (args.extra ? (args.extra.genre == 'New' ? news : args.extra.genre == 'New Season' ? newSe : tops) : tops)[args.type] : []) })
+  })
 })
 
-addon.runHTTPWithOptions({ port: process.env.PORT || 3000 })
+// cache for 2 days
+serveHTTP(addon.getInterface(), { port: process.env.PORT || 3000, cache: 172800 })
 
-addon.publishToCentral("https://top-zooqle.herokuapp.com/manifest.json")
-
+publishToCentral("https://top-zooqle.herokuapp.com/manifest.json")
